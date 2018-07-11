@@ -9,11 +9,10 @@ const connections: {[hash: string]: Sequelize.Sequelize} = {};
 /**
  * Returns a sequelize connection for the current configuration.
  *
- * @method getConnection
- * @param  {String} database The name of the database to connect to
- * @param  {String} username The username with which to connect to the database
- * @param  {String} password The password with which to connect to the database
- * @param  {Object} config   A set of optional configs used for the connection (like dialect, supportBigNumbers, etc)
+ * @param  {String} database The name of the database to connect to.
+ * @param  {String} username The username with which to connect to the database.
+ * @param  {String} password The password with which to connect to the database.
+ * @param  {Object} config   A set of optional configs used for the connection (like dialect, supportBigNumbers, etc).
  * @return {Object}          The connection for the passed configuration.
  */
 export function getConnection(database: string, username: string, password: string, config: Sequelize.Options): Promise<Sequelize.Sequelize> {
@@ -23,12 +22,12 @@ export function getConnection(database: string, username: string, password: stri
   const connectionExists: boolean = typeof connections[hash] !== 'undefined';
 
   if (connectionExists) {
-    logger.verbose(`Active postgres connection to '${database}' found.`);
+    logger.verbose(`Active connection to '${database}' found.`);
 
     return Promise.resolve(connections[hash]);
   }
   const connection: Sequelize.Sequelize = new Sequelize(database, username, password, config);
-  logger.verbose(`postgres connection to database '${database}' established.`);
+  logger.verbose(`Connection to database '${database}' established.`);
   connections[hash] = connection;
 
   return Promise.resolve(connection);
@@ -37,11 +36,9 @@ export function getConnection(database: string, username: string, password: stri
 /**
  * Generates a hash from config settings marking a unique connection.
  *
- * @method _getHash
- * @private
- * @param  {String} database The name of the database to connect to
- * @param  {String} username The username with which to connect to the database
- * @param  {String} password The password with which to connect to the database
+ * @param  {String} database The name of the database to connect to.
+ * @param  {String} username The username with which to connect to the database.
+ * @param  {String} password The password with which to connect to the database.
  * @return {String} The generated hash.
  */
 function _getHash(database: string, username: string, password: string): string {
