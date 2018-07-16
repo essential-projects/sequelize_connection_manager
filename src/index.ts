@@ -1,1 +1,1 @@
-export * from './binding_factory';
+export * from './connection_factory';
