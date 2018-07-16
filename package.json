@@ -13,7 +13,7 @@
     "Christian Werner <christian.werner@5minds.de>"
   ],
   "dependencies": {
-    "@essential-projects/errors_ts": "^1.2.0",
+    "crypto": "^1.0.1",
     "loggerhythm": "^3.0.3",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
