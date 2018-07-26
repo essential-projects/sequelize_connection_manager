@@ -1,5 +1,7 @@
 import * as crypto from 'crypto';
+import * as fsExtra from 'fs-extra';
 import {Logger} from 'loggerhythm';
+import * as path from 'path';
 import * as Sequelize from 'sequelize';
 
 const logger: Logger = Logger.createLogger('sequelize_connection_manager:connection_factory');
@@ -30,6 +32,14 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
 
     return Promise.resolve(connections[hash]);
   }
+
+  if (config.dialect === 'sqlite') {
+    const isAbsolutePath: boolean = path.isAbsolute(config.storage);
+    if (isAbsolutePath) {
+      fsExtra.ensureFileSync(config.storage);
+    }
+  }
+
   const connection: Sequelize.Sequelize = new Sequelize(config.database, config.username, config.password, config);
   logger.verbose(`Connection to database '${config.database}' established.`);
   connections[hash] = connection;
