@@ -23,7 +23,13 @@ const connections: {[hash: string]: Sequelize.Sequelize} = {};
  */
 export async function getConnection(config: Sequelize.Options): Promise<Sequelize.Sequelize> {
 
-  const hash: string = _getHash(config.database, config.username, config.password);
+  let hash: string;
+
+  if (config.dialect === 'sqlite') {
+    hash = _getHash(config.storage, config.username, config.password);
+  } else {
+    hash = _getHash(config.database, config.username, config.password);
+  }
 
   const connectionExists: boolean = typeof connections[hash] !== 'undefined';
 
