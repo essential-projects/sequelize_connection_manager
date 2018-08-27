@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://www.npmjs.com"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Creates and manages connections against a database, using sequelize.",
   "license": "MIT",
   "main": "dist/commonjs/index.js",
@@ -16,8 +16,6 @@
     "crypto": "^1.0.1",
     "fs-extra": "^7.0.0",
     "loggerhythm": "^3.0.3",
-    "pg": "^7.4.3",
-    "pg-hstore": "^2.3.2",
     "sequelize": "^4.38.0"
   },
   "devDependencies": {
