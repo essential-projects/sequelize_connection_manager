@@ -25,6 +25,10 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
 
   let hash: string;
 
+  const dbToUse: string = config.dialect === 'sqlite'
+    ? config.storage
+    : config.database;
+
   if (config.dialect === 'sqlite') {
     hash = _getHash(config.storage, config.username, config.password);
   } else {
@@ -34,7 +38,7 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
   const connectionExists: boolean = typeof connections[hash] !== 'undefined';
 
   if (connectionExists) {
-    logger.verbose(`Active connection to '${config.database}' found.`);
+    logger.verbose(`Active connection to '${dbToUse}' found.`);
 
     return Promise.resolve(connections[hash]);
   }
@@ -46,8 +50,8 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
     }
   }
 
-  const connection: Sequelize.Sequelize = new Sequelize(config.database, config.username, config.password, config);
-  logger.verbose(`Connection to database '${config.database}' established.`);
+  const connection: Sequelize.Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
+  logger.verbose(`Connection to database '${dbToUse}' established.`);
   connections[hash] = connection;
 
   return Promise.resolve(connection);
