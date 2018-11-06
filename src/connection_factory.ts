@@ -1,4 +1,4 @@
-import * as crypto from 'crypto';
+import * as bcrypt from 'bcryptjs';
 import * as fsExtra from 'fs-extra';
 import {Logger} from 'loggerhythm';
 import * as path from 'path';
@@ -35,8 +35,7 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
     hash = _getHash(config.database, config.username, config.password);
   }
 
-  const connectionExists: boolean = typeof connections[hash] !== 'undefined';
-
+  const connectionExists: boolean = connections[hash] !== undefined;
   if (connectionExists) {
     logger.verbose(`Active connection to '${dbToUse}' found.`);
 
@@ -66,8 +65,9 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
  * @return {String} The generated hash.
  */
 function _getHash(database: string, username: string, password: string): string {
-  const hash: crypto.Hash = crypto.createHash('sha256');
+  const saltRounds: number = 1;
   const properties: string = `${database}${username}${password}`;
+  const hashedXml: string = bcrypt.hashSync(properties, saltRounds);
 
-  return hash.update(properties).digest('hex');
+  return hashedXml;
 }
