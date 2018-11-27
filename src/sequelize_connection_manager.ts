@@ -4,8 +4,11 @@ import {Logger} from 'loggerhythm';
 import * as path from 'path';
 import * as Sequelize from 'sequelize';
 
-const logger: Logger = Logger.createLogger('sequelize_connection_manager:connection_factory');
+const logger: Logger = Logger.createLogger('essential-projects:sequelize_connection_manager');
 
+/**
+ * Creates, manages and destroys connections to Sequelize based databases.
+ */
 export class SequelizeConnectionManager {
 
   private connections: {[hash: string]: Sequelize.Sequelize} = {};
