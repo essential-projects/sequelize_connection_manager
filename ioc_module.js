@@ -4,8 +4,8 @@ const SequelizeConnectionManager = require('./dist/commonjs/index').SequelizeCon
 
 function registerInContainer(container) {
 
-  container.register('SequelizeConnectionManager', SequelizeConnectionManager)
-    .dependencies('container')
+  container
+    .register('SequelizeConnectionManager', SequelizeConnectionManager)
     .singleton();
 }
 
