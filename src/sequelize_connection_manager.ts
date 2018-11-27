@@ -14,15 +14,18 @@ export class SequelizeConnectionManager {
    * Returns a sequelize connection for the given configuration.
    *
    * @async
-   * @param  {Object} config          Contains the settings with which to establish a database connection.
-   *                                  Required parameters are host, port, database, dialect, username and password.
-   * @param  {String} config.host     The name of the host where the database is located
-   * @param  {String} config.port     The port by which to connect to the host
-   * @param  {String} config.dialect  The type of database to which to connect (postgres, sqlite, mysql, etc)
-   * @param  {String} config.database The name of the database to connect to.
-   * @param  {String} config.username The username with which to connect to the database.
-   * @param  {String} config.password The password with which to connect to the database.
-   * @return {Object}                 The connection for the passed configuration.
+   * @param  config          Contains the settings with which to establish a
+   *                         database connection.
+   *                         Required parameters are host, port, database,
+   *                         dialect, username and password.
+   * @param  config.host     The name of the host where the database is located.
+   * @param  config.port     The port by which to connect to the host.
+   * @param  config.dialect  The type of database to which to connect
+   *                         (postgres, sqlite, mysql, etc).
+   * @param  config.database The name of the database to connect to.
+   * @param  config.username The username with which to connect to the database.
+   * @param  config.password The password with which to connect to the database.
+   * @return                 The connection for the passed configuration.
    */
   public async getConnection(config: Sequelize.Options): Promise<Sequelize.Sequelize> {
 
@@ -97,10 +100,10 @@ export class SequelizeConnectionManager {
   /**
    * Generates a hash from config settings marking a unique connection.
    *
-   * @param  {String} database The name of the database to connect to.
-   * @param  {String} username The username with which to connect to the database.
-   * @param  {String} password The password with which to connect to the database.
-   * @return {String} The generated hash.
+   * @param  database The name of the database to connect to.
+   * @param  username The username with which to connect to the database.
+   * @param  password The password with which to connect to the database.
+   * @return          The generated hash.
    */
   private _getHash(database: string, username: string, password: string): string {
     const saltRounds: number = 1;
