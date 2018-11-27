@@ -37,7 +37,7 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
 
   const connectionExists: boolean = connections[hash] !== undefined;
   if (connectionExists) {
-    logger.verbose(`Active connection to '${dbToUse}' found.`);
+    logger.info(`Active connection to '${dbToUse}' found.`);
 
     return Promise.resolve(connections[hash]);
   }
@@ -50,10 +50,37 @@ export async function getConnection(config: Sequelize.Options): Promise<Sequeliz
   }
 
   const connection: Sequelize.Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
-  logger.verbose(`Connection to database '${dbToUse}' established.`);
+  logger.info(`Connection to database '${dbToUse}' established.`);
   connections[hash] = connection;
 
   return Promise.resolve(connection);
+}
+
+export async function destroyConnection(config: Sequelize.Options): Promise<void> {
+
+  let hash: string;
+
+  const dbToUse: string = config.dialect === 'sqlite'
+    ? config.storage
+    : config.database;
+
+  if (config.dialect === 'sqlite') {
+    hash = _getHash(config.storage, config.username, config.password);
+  } else {
+    hash = _getHash(config.database, config.username, config.password);
+  }
+
+  const connectionExists: boolean = connections[hash] !== undefined;
+  if (!connectionExists) {
+    logger.info(`Connection to '${dbToUse}' not found.`);
+
+    return Promise.resolve();
+  }
+
+  logger.info(`Disposing connection to '${dbToUse}'...`);
+  await (connections[hash] as Sequelize.Sequelize).close();
+  delete connections[hash];
+  logger.info(`Done.`);
 }
 
 /**
