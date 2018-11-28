@@ -36,7 +36,7 @@ export class SequelizeConnectionManager {
       ? config.storage
       : config.database;
 
-    const hash: string = this._getHash(dbToUse, config.username, config.password);
+    const hash: string = this._getHash(config.dialect, dbToUse, config.username, config.password);
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (connectionExists) {
@@ -73,7 +73,7 @@ export class SequelizeConnectionManager {
       ? config.storage
       : config.database;
 
-    const hash: string = this._getHash(dbToUse, config.username, config.password);
+    const hash: string = this._getHash(config.dialect, dbToUse, config.username, config.password);
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (!connectionExists) {
@@ -91,14 +91,15 @@ export class SequelizeConnectionManager {
   /**
    * Generates a hash from config settings marking a unique connection.
    *
+   * @param  dialect  The database dialect (sqlite, postgres, etc).
    * @param  database The name of the database to connect to.
    * @param  username The username with which to connect to the database.
    * @param  password The password with which to connect to the database.
    * @return          The generated hash.
    */
-  private _getHash(database: string, username: string, password: string): string {
+  private _getHash(dialect: string, database: string, username: string, password: string): string {
     const saltRounds: number = 1;
-    const properties: string = `${database}${username}${password}`;
+    const properties: string = `${dialect}${database}${username}${password}`;
     const hashedXml: string = bcrypt.hashSync(properties, saltRounds);
 
     return hashedXml;
