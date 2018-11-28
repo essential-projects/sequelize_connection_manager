@@ -67,7 +67,7 @@ import {
 
 class SomeSampleClass {
 
-private _sequelizeConnectionManager: SequelizeConnectionManager;
+  private _sequelizeConnectionManager: SequelizeConnectionManager;
 
   constructor(sequelizeConnectionManager: SequelizeConnectionManager) {
     this._sequelizeConnectionManager = sequelizeConnectionManager
