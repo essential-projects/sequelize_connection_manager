@@ -44,12 +44,28 @@ To inject it into another class, use the following registration:
     .dependencies('SequelizeConnectionManager');
 ```
 
+Then your class will get the manager injected into its constructor:
+
+```TypeScript
+import {
+  SequelizeConnectionManager,
+} from '@essential-projects/sequelize_connection_manager';
+
+
+class SomeSampleClass {
+
+private _sequelizeConnectionManager: SequelizeConnectionManager;
+
+constructor(sequelizeConnectionManager: SequelizeConnectionManager) {
+  this._sequelizeConnectionManager = sequelizeConnectionManager
+}
+```
+
 #### Manual instantiation
 
 You can create your own instance like so:
 
 ```TypeScript
-import * as Sequelize from 'sequelize';
 import {
   SequelizeConnectionManager,
 } from '@essential-projects/sequelize_connection_manager';
@@ -63,6 +79,7 @@ const sequelizeConnectionManager: SequelizeConnectionManager =
 To retrieve a connection to a specific database, use the following call:
 
 ```TypeScript
+import * as Sequelize from 'sequelize';
 
 const databaseConfig: Sequelize.Options = {
   dialect: 'postgres',
