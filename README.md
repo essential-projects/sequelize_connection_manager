@@ -56,8 +56,9 @@ class SomeSampleClass {
 
 private _sequelizeConnectionManager: SequelizeConnectionManager;
 
-constructor(sequelizeConnectionManager: SequelizeConnectionManager) {
-  this._sequelizeConnectionManager = sequelizeConnectionManager
+  constructor(sequelizeConnectionManager: SequelizeConnectionManager) {
+    this._sequelizeConnectionManager = sequelizeConnectionManager
+  }
 }
 ```
 
