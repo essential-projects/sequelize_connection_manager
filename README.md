@@ -15,7 +15,7 @@ Usage is simple enough.
 You need to have a valid Sequelize connection config at hand that you
 can pass to the manager.
 
-Then you can just use one of the calls for getting or destroying a connection.
+With it, you can create, retrieve and close any Sequelize connection.
 
 ### Create an instance
 
@@ -54,13 +54,6 @@ import {
   SequelizeConnectionManager,
 } from '@essential-projects/sequelize_connection_manager';
 
-const databaseConfig: Sequelize.Options = {
-  dialect: 'postgres',
-  database: 'sample_database',
-  username: 'someusername',
-  password: 'somepassword',
-};
-
 const sequelizeConnectionManager: SequelizeConnectionManager =
   new SequelizeConnectionManager();
 ```
@@ -70,6 +63,14 @@ const sequelizeConnectionManager: SequelizeConnectionManager =
 To retrieve a connection to a specific database, use the following call:
 
 ```TypeScript
+
+const databaseConfig: Sequelize.Options = {
+  dialect: 'postgres',
+  database: 'sample_database',
+  username: 'someusername',
+  password: 'somepassword',
+};
+
 const sequelizeConnection: Sequelize.Sequelize =
   await sequelizeConnectionManager.getConnection(config)
 ```
