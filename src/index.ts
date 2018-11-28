@@ -1,1 +1,1 @@
-export * from './connection_factory';
+export * from './sequelize_connection_manager';
