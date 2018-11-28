@@ -14,7 +14,7 @@ export class SequelizeConnectionManager {
   private connections: {[hash: string]: Sequelize.Sequelize} = {};
 
   /**
-   * Returns a sequelize connection for the given configuration.
+   * Returns a Sequelize connection for the given configuration.
    *
    * @async
    * @param  config          Contains the settings with which to establish a
@@ -32,17 +32,11 @@ export class SequelizeConnectionManager {
    */
   public async getConnection(config: Sequelize.Options): Promise<Sequelize.Sequelize> {
 
-    let hash: string;
-
     const dbToUse: string = config.dialect === 'sqlite'
       ? config.storage
       : config.database;
 
-    if (config.dialect === 'sqlite') {
-      hash = this._getHash(config.storage, config.username, config.password);
-    } else {
-      hash = this._getHash(config.database, config.username, config.password);
-    }
+    const hash: string = this._getHash(dbToUse, config.username, config.password);
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (connectionExists) {
@@ -52,8 +46,8 @@ export class SequelizeConnectionManager {
     }
 
     if (config.dialect === 'sqlite') {
-      const isAbsolutePath: boolean = path.isAbsolute(config.storage);
-      if (isAbsolutePath) {
+      const pathIsAbsolute: boolean = path.isAbsolute(config.storage);
+      if (pathIsAbsolute) {
         fsExtra.ensureFileSync(config.storage);
       }
     }
@@ -67,7 +61,7 @@ export class SequelizeConnectionManager {
 
   /**
    *
-   * Destroys a sequelize connection, based on the given config.
+   * Destroys a Sequelize connection based on the given config.
    *
    * @async
    * @param {Object} config Contains the settings that describe the Sequelize
@@ -75,17 +69,11 @@ export class SequelizeConnectionManager {
    */
   public async destroyConnection(config: Sequelize.Options): Promise<void> {
 
-    let hash: string;
-
     const dbToUse: string = config.dialect === 'sqlite'
       ? config.storage
       : config.database;
 
-    if (config.dialect === 'sqlite') {
-      hash = this._getHash(config.storage, config.username, config.password);
-    } else {
-      hash = this._getHash(config.database, config.username, config.password);
-    }
+    const hash: string = this._getHash(dbToUse, config.username, config.password);
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (!connectionExists) {
