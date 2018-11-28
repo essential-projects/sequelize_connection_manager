@@ -19,7 +19,20 @@ With it, you can create, retrieve and close any Sequelize connection.
 
 ### Create an instance
 
-You can instantiate the `SequelizeConnectionManager` one of two ways:
+You can get an instance of the manager in one of two ways:
+
+#### Manual instantiation
+
+You can simply create an instance the usual way.
+
+```TypeScript
+import {
+  SequelizeConnectionManager,
+} from '@essential-projects/sequelize_connection_manager';
+
+const sequelizeConnectionManager: SequelizeConnectionManager =
+  new SequelizeConnectionManager();
+```
 
 #### Through IoC
 
@@ -60,19 +73,6 @@ private _sequelizeConnectionManager: SequelizeConnectionManager;
     this._sequelizeConnectionManager = sequelizeConnectionManager
   }
 }
-```
-
-#### Manual instantiation
-
-You can create your own instance like so:
-
-```TypeScript
-import {
-  SequelizeConnectionManager,
-} from '@essential-projects/sequelize_connection_manager';
-
-const sequelizeConnectionManager: SequelizeConnectionManager =
-  new SequelizeConnectionManager();
 ```
 
 ### Get a Connection
