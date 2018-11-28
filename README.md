@@ -8,7 +8,7 @@ same database.
 It stores each created connection in an internal connection storage and provides
 methods for creating and retrieving such a connection and for destroying it.
 
-# Usage
+## Usage
 
 Usage is simple enough.
 
@@ -17,12 +17,38 @@ can pass to the manager.
 
 Then you can just use one of the calls for getting or destroying a connection.
 
-## Get a Connection
+### Create an instance
 
-To retrieve a connection to a specific database, use the following call:
+You can instantiate the `SequelizeConnectionManager` one of two ways:
+
+#### Through IoC
+
+The manager provides a module that can be used with [addict-ioc](https://github.com/5minds/addict-ioc/).
+
+The registration looks like this:
 
 ```TypeScript
+  container
+    .register('SequelizeConnectionManager', SequelizeConnectionManager)
+    .singleton();
+```
 
+It registers the manager as a Singleton component, meaning that any class that
+gets it as a dependency, will get the same instance.
+
+To inject it into another class, use the following registration:
+
+```TypeScript
+  container
+    .register('SomeSampleRegistration', SomeSampleClass)
+    .dependencies('SequelizeConnectionManager');
+```
+
+#### Manual instantiation
+
+You can create your own instance like so:
+
+```TypeScript
 import * as Sequelize from 'sequelize';
 import {
   SequelizeConnectionManager,
@@ -37,7 +63,13 @@ const databaseConfig: Sequelize.Options = {
 
 const sequelizeConnectionManager: SequelizeConnectionManager =
   new SequelizeConnectionManager();
+```
 
+### Get a Connection
+
+To retrieve a connection to a specific database, use the following call:
+
+```TypeScript
 const sequelizeConnection: Sequelize.Sequelize =
   await sequelizeConnectionManager.getConnection(config)
 ```
@@ -49,7 +81,7 @@ If no such connection has been established before, a new one will be created.
 
 If a matching connection already exists, the manager will return that one instead.
 
-## Close a Connection
+### Close a Connection
 
 To close an existing connection, pass the same config to the following call:
 
