@@ -47,16 +47,14 @@ the given credentials for authentication.
 
 If no such connection has been established before, a new one will be created.
 
-If a matching connection already exists, the ConnectionManager will return it
-instead.
+If a matching connection already exists, the manager will return that one instead.
 
 ## Close a Connection
 
 To close an existing connection, pass the same config to the following call:
 
 ```TypeScript
-const sequelizeConnection: Sequelize.Sequelize =
-  await sequelizeConnectionManager.destroyConnection(config)
+await sequelizeConnectionManager.destroyConnection(config)
 ```
 
 **Caution:**
