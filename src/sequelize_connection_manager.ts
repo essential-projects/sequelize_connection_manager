@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
 import * as fsExtra from 'fs-extra';
 import {Logger} from 'loggerhythm';
 import * as path from 'path';
@@ -98,10 +98,9 @@ export class SequelizeConnectionManager {
    * @return          The generated hash.
    */
   private _getHash(dialect: string, database: string, username: string, password: string): string {
-    const saltRounds: number = 1;
     const properties: string = `${dialect}${database}${username}${password}`;
-    const hashedXml: string = bcrypt.hashSync(properties, saltRounds);
+    const hashedString: string = crypto.createHash('md5').update(properties).digest('hex');
 
-    return hashedXml;
+    return hashedString;
   }
 }

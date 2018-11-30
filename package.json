@@ -13,7 +13,6 @@
     "Christian Werner <christian.werner@5minds.de>"
   ],
   "dependencies": {
-    "bcryptjs": "~2.4.3",
     "fs-extra": "~7.0.0",
     "loggerhythm": "~3.0.3",
     "sequelize": "~4.41.2"
