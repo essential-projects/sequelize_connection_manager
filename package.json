@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://www.npmjs.com"
   },
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Creates and manages connections against a database, using sequelize.",
   "license": "MIT",
   "main": "dist/commonjs/index.js",
@@ -13,7 +13,6 @@
     "Christian Werner <christian.werner@5minds.de>"
   ],
   "dependencies": {
-    "bcryptjs": "~2.4.3",
     "fs-extra": "~7.0.0",
     "loggerhythm": "~3.0.3",
     "sequelize": "~4.41.2"
