@@ -52,6 +52,14 @@ export class SequelizeConnectionManager {
       }
     }
 
+    config.retry = {
+      match: [
+         /SQL_BUSY/,
+         /SQLITE_BUSY/,
+       ],
+      max: 50,
+    };
+
     const connection: Sequelize.Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
     logger.info(`Connection to database '${dbToUse}' established.`);
     this.connections[hash] = connection;
