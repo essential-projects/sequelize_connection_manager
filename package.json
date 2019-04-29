@@ -12,8 +12,8 @@
     "Christian Werner <christian.werner@5minds.de>"
   ],
   "dependencies": {
-    "fs-extra": "17.0.0",
-    "loggerhythm": "13.0.3",
+    "fs-extra": "^7.0.0",
+    "loggerhythm": "^3.0.3",
     "reflect-metadata": "^0.1.13",
     "sequelize": "~5.7.0",
     "sequelize-typescript": "next"
