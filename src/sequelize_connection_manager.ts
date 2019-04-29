@@ -40,7 +40,7 @@ export class SequelizeConnectionManager {
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (connectionExists) {
-      logger.info(`Active connection to '${dbToUse}' found.`);
+      logger.info(`Active connection to ${config.dialect} database '${dbToUse}' found.`);
 
       return Promise.resolve(this.connections[hash]);
     }
@@ -61,7 +61,7 @@ export class SequelizeConnectionManager {
     };
 
     const connection: Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
-    logger.info(`Connection to database '${dbToUse}' established.`);
+    logger.info(`Connection to ${config.dialect} database '${dbToUse}' established.`);
     this.connections[hash] = connection;
 
     return Promise.resolve(connection);
@@ -85,12 +85,12 @@ export class SequelizeConnectionManager {
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (!connectionExists) {
-      logger.info(`Connection to '${dbToUse}' not found.`);
+      logger.info(`Connection to ${config.dialect} database '${dbToUse}' not found.`);
 
       return Promise.resolve();
     }
 
-    logger.info(`Disposing connection to '${dbToUse}'...`);
+    logger.info(`Disposing connection to ${config.dialect} database '${dbToUse}'...`);
     await (this.connections[hash] as Sequelize).close();
     delete this.connections[hash];
     logger.info(`Done.`);
