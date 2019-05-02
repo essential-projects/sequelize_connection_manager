@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 import * as fsExtra from 'fs-extra';
 import {Logger} from 'loggerhythm';
 import * as path from 'path';
-import * as Sequelize from 'sequelize';
+import {Sequelize, SequelizeOptions} from 'sequelize-typescript';
 
 const logger: Logger = Logger.createLogger('essential-projects:sequelize_connection_manager');
 
@@ -11,7 +11,7 @@ const logger: Logger = Logger.createLogger('essential-projects:sequelize_connect
  */
 export class SequelizeConnectionManager {
 
-  private connections: {[hash: string]: Sequelize.Sequelize} = {};
+  private connections: {[hash: string]: Sequelize} = {};
 
   /**
    * Returns a Sequelize connection for the given configuration.
@@ -30,7 +30,7 @@ export class SequelizeConnectionManager {
    * @param  config.password The password with which to connect to the database.
    * @return                 The connection for the passed configuration.
    */
-  public async getConnection(config: Sequelize.Options): Promise<Sequelize.Sequelize> {
+  public async getConnection(config: SequelizeOptions): Promise<Sequelize> {
 
     const dbToUse: string = config.dialect === 'sqlite'
       ? config.storage
@@ -40,7 +40,7 @@ export class SequelizeConnectionManager {
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (connectionExists) {
-      logger.info(`Active connection to '${dbToUse}' found.`);
+      logger.info(`Active connection to ${config.dialect} database '${dbToUse}' found.`);
 
       return Promise.resolve(this.connections[hash]);
     }
@@ -60,8 +60,8 @@ export class SequelizeConnectionManager {
       max: 50,
     };
 
-    const connection: Sequelize.Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
-    logger.info(`Connection to database '${dbToUse}' established.`);
+    const connection: Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
+    logger.info(`Connection to ${config.dialect} database '${dbToUse}' established.`);
     this.connections[hash] = connection;
 
     return Promise.resolve(connection);
@@ -75,7 +75,7 @@ export class SequelizeConnectionManager {
    * @param {Object} config Contains the settings that describe the Sequelize
    *                        connection to destroy.
    */
-  public async destroyConnection(config: Sequelize.Options): Promise<void> {
+  public async destroyConnection(config: SequelizeOptions): Promise<void> {
 
     const dbToUse: string = config.dialect === 'sqlite'
       ? config.storage
@@ -85,13 +85,13 @@ export class SequelizeConnectionManager {
 
     const connectionExists: boolean = this.connections[hash] !== undefined;
     if (!connectionExists) {
-      logger.info(`Connection to '${dbToUse}' not found.`);
+      logger.info(`Connection to ${config.dialect} database '${dbToUse}' not found.`);
 
       return Promise.resolve();
     }
 
-    logger.info(`Disposing connection to '${dbToUse}'...`);
-    await (this.connections[hash] as Sequelize.Sequelize).close();
+    logger.info(`Disposing connection to ${config.dialect} database '${dbToUse}'...`);
+    await (this.connections[hash] as Sequelize).close();
     delete this.connections[hash];
     logger.info(`Done.`);
   }
