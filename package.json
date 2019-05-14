@@ -15,7 +15,7 @@
     "fs-extra": "^7.0.0",
     "loggerhythm": "^3.0.3",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "~5.7.0",
+    "sequelize": "^5.8.0",
     "sequelize-typescript": "next"
   },
   "devDependencies": {
