@@ -97,7 +97,9 @@ export class SequelizeConnectionManager {
       logger.warn('Cannot close connection, becasue it was already disposed.');
       logger.verbose(error.message);
     } finally {
-      delete this.connections[hash];
+      if (this.connections[hash] !== undefined) {
+        delete this.connections[hash];
+      }
       logger.info('Done.');
     }
 
