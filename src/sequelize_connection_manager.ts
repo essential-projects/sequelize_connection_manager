@@ -4,7 +4,7 @@ import {Logger} from 'loggerhythm';
 import * as path from 'path';
 import {Sequelize, SequelizeOptions} from 'sequelize-typescript';
 
-const logger: Logger = Logger.createLogger('essential-projects:sequelize_connection_manager');
+const logger = Logger.createLogger('essential-projects:sequelize_connection_manager');
 
 /**
  * Creates, manages and destroys connections to Sequelize based databases.
@@ -32,13 +32,13 @@ export class SequelizeConnectionManager {
    */
   public async getConnection(config: SequelizeOptions): Promise<Sequelize> {
 
-    const dbToUse: string = config.dialect === 'sqlite'
+    const dbToUse = config.dialect === 'sqlite'
       ? config.storage
       : config.database;
 
-    const hash: string = this._getHash(config.dialect, dbToUse, config.username, config.password);
+    const hash = this.getHash(config.dialect, dbToUse, config.username, config.password);
 
-    const connectionExists: boolean = this.connections[hash] !== undefined;
+    const connectionExists = this.connections[hash] !== undefined;
     if (connectionExists) {
       logger.info(`Active connection to ${config.dialect} database '${dbToUse}' found.`);
 
@@ -46,21 +46,22 @@ export class SequelizeConnectionManager {
     }
 
     if (config.dialect === 'sqlite') {
-      const pathIsAbsolute: boolean = path.isAbsolute(config.storage);
+      const pathIsAbsolute = path.isAbsolute(config.storage);
       if (pathIsAbsolute) {
         fsExtra.ensureFileSync(config.storage);
       }
     }
 
+    // eslint-disable-next-line no-param-reassign
     config.retry = {
       match: [
-         /SQL_BUSY/,
-         /SQLITE_BUSY/,
-       ],
+        /SQL_BUSY/,
+        /SQLITE_BUSY/,
+      ],
       max: 50,
     };
 
-    const connection: Sequelize = new Sequelize(dbToUse, config.username, config.password, config);
+    const connection = new Sequelize(dbToUse, config.username, config.password, config);
     logger.info(`Connection to ${config.dialect} database '${dbToUse}' established.`);
     this.connections[hash] = connection;
 
@@ -77,23 +78,23 @@ export class SequelizeConnectionManager {
    */
   public async destroyConnection(config: SequelizeOptions): Promise<void> {
 
-    const dbToUse: string = config.dialect === 'sqlite'
+    const dbToUse = config.dialect === 'sqlite'
       ? config.storage
       : config.database;
 
-    const hash: string = this._getHash(config.dialect, dbToUse, config.username, config.password);
+    const hash = this.getHash(config.dialect, dbToUse, config.username, config.password);
 
-    const connectionExists: boolean = this.connections[hash] !== undefined;
+    const connectionExists = this.connections[hash] !== undefined;
     if (!connectionExists) {
       logger.info(`Connection to ${config.dialect} database '${dbToUse}' not found.`);
 
-      return Promise.resolve();
+      return;
     }
 
     logger.info(`Disposing connection to ${config.dialect} database '${dbToUse}'...`);
     await (this.connections[hash] as Sequelize).close();
     delete this.connections[hash];
-    logger.info(`Done.`);
+    logger.info('Done.');
   }
 
   /**
@@ -105,10 +106,12 @@ export class SequelizeConnectionManager {
    * @param  password The password with which to connect to the database.
    * @return          The generated hash.
    */
-  private _getHash(dialect: string, database: string, username: string, password: string): string {
-    const properties: string = `${dialect}${database}${username}${password}`;
-    const hashedString: string = crypto.createHash('md5').update(properties).digest('hex');
+  private getHash(dialect: string, database: string, username: string, password: string): string {
+    const properties = `${dialect}${database}${username}${password}`;
+    const hashedString = crypto.createHash('md5').update(properties)
+      .digest('hex');
 
     return hashedString;
   }
+
 }
