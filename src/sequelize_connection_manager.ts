@@ -102,7 +102,6 @@ export class SequelizeConnectionManager {
       }
       logger.info('Done.');
     }
-
   }
 
   /**
