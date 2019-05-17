@@ -90,11 +90,17 @@ export class SequelizeConnectionManager {
 
       return;
     }
+    try {
+      logger.info(`Disposing connection to ${config.dialect} database '${dbToUse}'...`);
+      await (this.connections[hash] as Sequelize).close();
+    } catch (error) {
+      logger.warn('Cannot close connection, becasue it was already disposed.');
+      logger.verbose(error.message);
+    } finally {
+      delete this.connections[hash];
+      logger.info('Done.');
+    }
 
-    logger.info(`Disposing connection to ${config.dialect} database '${dbToUse}'...`);
-    await (this.connections[hash] as Sequelize).close();
-    delete this.connections[hash];
-    logger.info('Done.');
   }
 
   /**
