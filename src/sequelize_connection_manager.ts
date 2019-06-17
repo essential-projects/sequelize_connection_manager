@@ -94,7 +94,7 @@ export class SequelizeConnectionManager {
       logger.info(`Disposing connection to ${config.dialect} database '${dbToUse}'...`);
       await (this.connections[hash] as Sequelize).close();
     } catch (error) {
-      logger.warn('Cannot close connection, becasue it was already disposed.');
+      logger.warn('Cannot close connection, because it was already disposed.');
       logger.verbose(error.message);
     } finally {
       if (this.connections[hash] !== undefined) {
